@@ -1,4 +1,4 @@
-/* AprovaCert — Simulado gratuito C-Pro R (20 questões originais)
+/* Investir Claro — Simulado gratuito C-Pro R (20 questões originais)
    Distribuição pelos pesos do programa detalhado ANBIMA vigente desde 01/01/2026:
    Prospecção 20% (4) · Análise do cliente 20% (4) · Indicação 40% (8) · Portfólio 20% (4) */
 window.APROVA_SIMULADO = {

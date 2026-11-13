@@ -1,4 +1,4 @@
-/* AprovaCert — Simulado gratuito CPA (20 questões originais)
+/* Investir Claro — Simulado gratuito CPA (20 questões originais)
    Distribuição pelos pesos do programa detalhado ANBIMA vigente desde 01/01/2026:
    SFN 20% (4) · Produtos 40% (8) · Relacionamento 30% (6) · Inovação 10% (2) */
 window.APROVA_SIMULADO = {
