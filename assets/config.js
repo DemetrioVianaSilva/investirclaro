@@ -5,7 +5,8 @@ window.APROVA_CONFIG = {
   // Links de checkout da Hotmart (Produtos > seu produto > Links)
   checkout: {
     "cpa": "https://pay.hotmart.com/SEU_CODIGO_CPA",
-    "cpro-r": "https://pay.hotmart.com/SEU_CODIGO_CPRO_R"
+    "cpro-r": "https://pay.hotmart.com/SEU_CODIGO_CPRO_R",
+    "planilha": "https://pay.hotmart.com/D108477807B"
   },
 
   // Data em que o acesso pago é liberado (pré-venda). Deixe "" quando o produto já estiver pronto.
@@ -52,8 +53,9 @@ document.addEventListener("DOMContentLoaded", function () {
     var url = cfg.checkout[a.getAttribute("data-checkout")];
     /* Enquanto o link da Hotmart não for configurado, o botão leva ao simulado grátis em vez de um link quebrado */
     if (!url || url.indexOf("SEU_CODIGO") >= 0) {
-      a.textContent = "Vendas abrem em breve: faça o simulado grátis";
-      a.href = "simulado.html";
+      var fb = a.getAttribute("data-fallback");
+      a.textContent = fb ? "Vendas abrem em breve" : "Vendas abrem em breve: faça o simulado grátis";
+      a.href = fb || "simulado.html";
       a.removeAttribute("data-checkout");
       return;
     }
