@@ -18,10 +18,10 @@ window.APROVA_CONFIG = {
   supabaseAnonKey: "",
 
   // Google Ads: ID da tag (AW-XXXXXXXXX) e rótulos das conversões
-  googleAdsId: "",
+  googleAdsId: "AW-18484684141",
   conversoes: {
     lead: "",          // ex.: "AW-123456789/AbCdEfGh" — disparada ao enviar o e-mail no simulado
-    cliqueCheckout: "" // disparada ao clicar em comprar
+    cliqueCheckout: "AW-18484684141/7ktbCJvw2LgdEO3Kl-5E" // disparada ao clicar em comprar
   },
 
   emailContato: "demetriovianasilva@gmail.com"
