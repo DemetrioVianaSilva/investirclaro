@@ -439,5 +439,5 @@ details p { margin-top: 10px; color: var(--muted); }
 .alt.certa .bolha { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .alt:disabled { cursor: default; opacity: 1; }
 .erro-msg { color: var(--erro); font-weight: 600; }
-#marca-agua { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; opacity: .05; font: 600 14px/3.2 var(--font-body); color: var(--ink); transform: rotate(-24deg) scale(1.6); word-break: break-all; user-select: none; }
+#marca-agua { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; opacity: .025; font: 600 13px/3.6 var(--font-body); color: var(--ink); transform: rotate(-24deg) scale(1.6); word-break: break-all; user-select: none; }
 .area-aluno { -webkit-user-select: none; user-select: none; }
