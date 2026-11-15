@@ -148,13 +148,15 @@
       '<h1>Olá! Seu banco tem <span class="marca">' + banco.length + ' questões</span></h1>' +
       '<div class="regras"><div><strong>' + CONF.totalSim + '</strong><span>questões no simulado</span></div><div><strong>' + (CONF.tempoMin / 60).toString().replace(".", ",") + ' h</strong><span>de tempo, como na prova</span></div><div><strong>' + Math.round(CONF.minimo * 100) + '%</strong><span>para passar</span></div></div>' +
       '<h2>Simulado completo</h2><p>As questões são sorteadas a cada tentativa, nos pesos da prova: SFN 20%, Produtos 40%, Relacionamento 30% e Inovação 10%.</p>' +
-      '<div class="acoes"><button class="btn btn-grande" id="simulado">Começar simulado de ' + CONF.totalSim + ' questões</button></div>' +
+      '<div class="acoes"><button class="btn btn-grande" id="simulado">Modo prova real: ' + CONF.totalSim + ' questões</button><button class="btn btn-sec" id="simulado-livre">Modo livre (pode voltar)</button></div>' +
+      '<p class="muted" style="font-size:.95rem">No <strong>modo prova real</strong> a questão trava assim que você avança, como na prova da ANBIMA: não dá para voltar nem revisar no final. Pular deixa a questão em branco. O <strong>modo livre</strong> permite voltar e trocar respostas.</p>' +
       '<h2>Treino por tema</h2><p>10 questões sorteadas do tema escolhido, com o comentário logo depois de cada resposta.</p>' +
       '<div class="acoes" style="flex-wrap:wrap">' + temas + '</div>' +
       '<h2>Seus últimos resultados</h2>' + histHtml +
       '</div>';
     document.getElementById("sair").onclick = sair;
-    document.getElementById("simulado").onclick = function () { iniciar(sortear(CONF.pesos), "Simulado completo", false); };
+    document.getElementById("simulado").onclick = function () { iniciar(sortear(CONF.pesos), "Simulado · modo prova real", false, true); };
+    document.getElementById("simulado-livre").onclick = function () { iniciar(sortear(CONF.pesos), "Simulado · modo livre", false, false); };
     app.querySelectorAll("[data-tema]").forEach(function (b) {
       b.onclick = function () { var k = b.getAttribute("data-tema"), p = {}; p[k] = 10; iniciar(sortear(p), "Treino · " + CONF.temas[k], true); };
     });
@@ -170,7 +172,7 @@
   }
 
   /* ---------- Prova ---------- */
-  function iniciar(qs, tipo, treino) {
+  function iniciar(qs, tipo, treino, real) {
     var resp = new Array(qs.length).fill(null), inicio = Date.now(), limite = treino ? 0 : CONF.tempoMin * 60000;
     if (timer) clearInterval(timer);
     timer = setInterval(function () {
@@ -193,13 +195,14 @@
         '<p class="enunciado">' + esc(q.enunciado) + '</p>' +
         '<div class="alts" role="group" aria-label="Alternativas">' + alts + '</div>' +
         (ver ? '<div class="rev ' + (r === q.correta ? "certa" : "errada") + '" style="margin-top:16px"><p><strong>' + (r === q.correta ? "Certo!" : "Resposta correta: " + LETRAS[q.correta]) + '</strong></p><p class="coment">' + esc(q.comentario) + '</p></div>' : '') +
-        '<div class="sim-nav"><button class="btn btn-sec" id="voltar"' + (i === 0 ? " disabled" : "") + '>Anterior</button>' +
+        (real ? '<p class="muted" style="font-size:.9rem;margin-top:12px">Modo prova real: ao avançar, esta questão fica travada.</p>' : '') +
+        '<div class="sim-nav">' + (real ? '' : '<button class="btn btn-sec" id="voltar"' + (i === 0 ? " disabled" : "") + '>Anterior</button>') +
         '<button class="btn btn-sec" id="parar">Encerrar</button>' +
-        '<button class="btn" id="avancar"' + (r === null ? " disabled" : "") + '>' + (ultima ? "Ver resultado" : "Próxima") + '</button></div>';
+        '<button class="btn" id="avancar"' + (r === null && !real ? " disabled" : "") + '>' + (ultima ? "Ver resultado" : (real && r === null ? "Pular (fica em branco)" : "Próxima")) + '</button></div>';
       app.querySelectorAll(".alt").forEach(function (b) {
         b.onclick = function () { resp[i] = Number(b.getAttribute("data-k")); mostrar(i); };
       });
-      document.getElementById("voltar").onclick = function () { mostrar(i - 1); };
+      var bv = document.getElementById("voltar"); if (bv) bv.onclick = function () { mostrar(i - 1); };
       document.getElementById("avancar").onclick = function () { if (ultima) fim(); else mostrar(i + 1); };
       document.getElementById("parar").onclick = function () { fim(); };
       topo();
