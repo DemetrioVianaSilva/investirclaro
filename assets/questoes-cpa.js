@@ -6,6 +6,7 @@ window.APROVA_SIMULADO = {
   slug: "cpa",
   minimo: 0.70,
   tempoMin: 60,
+  sorteio: { sfn: 4, produtos: 8, relacionamento: 6, inovacao: 2 },
   temas: {
     sfn: "Estrutura e dinâmica do SFN",
     produtos: "Produtos do mercado financeiro",

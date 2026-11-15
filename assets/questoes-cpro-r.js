@@ -6,6 +6,7 @@ window.APROVA_SIMULADO = {
   slug: "cpro-r",
   minimo: 0.71,
   tempoMin: 60,
+  sorteio: { prospeccao: 4, analise: 4, indicacao: 8, portfolio: 4 },
   temas: {
     prospeccao: "Prospecção e relacionamento",
     analise: "Análise de informações do cliente",

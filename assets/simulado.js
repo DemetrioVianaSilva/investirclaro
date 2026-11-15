@@ -5,6 +5,28 @@
   var CFG = window.APROVA_CONFIG || {};
   var app = document.getElementById("simulado");
   var LETRAS = ["A", "B", "C", "D"];
+  function misturar(lista) {
+    for (var i = lista.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = lista[i]; lista[i] = lista[j]; lista[j] = t; }
+    return lista;
+  }
+  /* Sorteia as questões da tentativa: respeita os pesos por tema (S.sorteio) quando o banco gratuito
+     tem mais questões que o simulado, e mistura a ordem a cada tentativa */
+  var BANCO = S.questoes.slice();
+  function sortear() {
+    var pool = BANCO.slice();
+    if (S.sorteio) {
+      var escolhidas = [];
+      Object.keys(S.sorteio).forEach(function (tema) {
+        var doTema = misturar(pool.filter(function (q) { return q.tema === tema; }));
+        escolhidas = escolhidas.concat(doTema.slice(0, S.sorteio[tema]));
+      });
+      pool = escolhidas;
+    }
+    S.questoes = misturar(pool).map(function (q) {
+      return { tema: q.tema, enunciado: q.enunciado, alternativas: q.alternativas.slice(), correta: q.correta, comentario: q.comentario };
+    });
+  }
+  sortear();
   /* Embaralha a ordem das alternativas a cada tentativa, para o gabarito não seguir padrão */
   function embaralhar() {
     S.questoes.forEach(function (q) {
@@ -197,7 +219,7 @@
       '<div class="revisao">' + revHtml + '</div>' +
       '<div class="acoes"><button class="btn btn-sec" id="refazer">Refazer o simulado</button></div>' +
       '</div>';
-    document.getElementById("refazer").onclick = function () { respostas.fill(null); embaralhar(); intro(); topo(); };
+    document.getElementById("refazer").onclick = function () { sortear(); embaralhar(); respostas = new Array(S.questoes.length).fill(null); atual = 0; intro(); topo(); };
     topo();
   }
 
