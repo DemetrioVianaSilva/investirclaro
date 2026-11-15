@@ -74,7 +74,7 @@
       var email = document.getElementById("email").value.trim().toLowerCase();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return login("Confira o e-mail digitado.");
       var b = this.querySelector("button"); b.disabled = true; b.textContent = "Enviando…";
-      api("/auth/v1/otp", { method: "POST", body: { email: email, create_user: true } })
+      api("/auth/v1/otp?redirect_to=" + encodeURIComponent(location.origin + location.pathname), { method: "POST", body: { email: email, create_user: true } })
         .then(function () { enviado(email); })
         .catch(function (e) { login(e.status === 429 ? "Muitas tentativas em pouco tempo. Espere alguns minutos e tente de novo." : "Não conseguimos enviar agora. Tente de novo em instantes."); });
     };

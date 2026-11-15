@@ -2,6 +2,11 @@
    Carregado no <head> para aplicar o tema antes da página aparecer (sem "piscar"). */
 (function () {
   var raiz = document.documentElement;
+  /* Login da área do aluno: se o link do e-mail cair em outra página, leva para a área com o token */
+  if (/(^#|&)(access_token|error_code)=/.test(location.hash) && location.pathname.indexOf("/area/") < 0) {
+    location.replace((raiz.getAttribute("data-raiz") || "./") + "area/cpa.html" + location.hash);
+    return;
+  }
   /* Guarda no navegador; se o armazenamento estiver bloqueado, usa window.name,
      que sobrevive à troca de página na mesma aba. */
   function lerNome(k) { var m = (window.name || "").match(new RegExp("(?:^|;)" + k + "=([^;]*)")); return m ? m[1] : null; }
