@@ -461,3 +461,15 @@ details p { margin-top: 10px; color: var(--muted); }
 .caixa-produto p { margin: 0; }
 
 @media (max-width: 760px) { .so-desktop { display: none; } }
+
+/* ---------- Árvores de diálogo (área do aluno) ---------- */
+.caso { border: 1px solid var(--line); background: var(--surface); border-radius: var(--r); padding: 14px 16px; margin-block: 8px 14px; }
+.caso p { margin: 6px 0 0; color: var(--muted); }
+.caso summary { cursor: pointer; font-weight: 600; color: var(--accent-strong); }
+.conversa { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.fala { max-width: 88%; padding: 10px 14px; border-radius: 14px; line-height: 1.45; }
+.fala span { display: block; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 2px; }
+.fala.cliente { align-self: flex-start; background: var(--surface); border: 1px solid var(--line); }
+.fala.cliente.atual { border-color: var(--accent); }
+.fala.voce { align-self: flex-end; background: var(--accent-soft); }
+.fala.vazia { color: var(--muted); font-style: italic; }

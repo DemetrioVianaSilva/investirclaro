@@ -11,7 +11,7 @@
     cpa: {
       nome: "CPA", minimo: 0.70, totalSim: 50, tempoMin: 150,
       temas: { sfn: "Estrutura e dinâmica do SFN", produtos: "Produtos do mercado financeiro", relacionamento: "Relacionamento com o cliente", inovacao: "Inovação e desenvolvimento de mercado" },
-      pesos: { sfn: 10, produtos: 20, relacionamento: 15, inovacao: 5 }
+      pesos: { sfn: 8, produtos: 16, relacionamento: 12, inovacao: 4 }, arvores: 5
     }
   }[PROVA];
   var LETRAS = ["A", "B", "C", "D"];
@@ -109,7 +109,7 @@
       .then(function (u) { sessao.email = u.email; gravar(CHAVE, sessao); return api("/rest/v1/compradores?select=status&prova=eq." + PROVA); })
       .then(function (c) {
         /* Quem decide o acesso é o banco (RLS): sem compra ativa, a consulta volta vazia */
-        return api("/rest/v1/questoes?select=numero,tema,enunciado,alternativas,correta,comentario&prova=eq." + PROVA + "&ativo=eq.true&order=numero&limit=2000")
+        return api("/rest/v1/questoes?select=numero,tema,enunciado,alternativas,correta,comentario,grupo,dialogo&prova=eq." + PROVA + "&ativo=eq.true&order=numero&limit=2000")
           .then(function (q) { banco = q || []; if (!banco.length) return semAcesso(c && c[0] ? c[0].status : null); marca(); menu(); });
       })
       .catch(function (e) { if (e.status === 401 || e.message === "sem sessão") return sair(); login("Sua sessão expirou. Entre de novo."); });
@@ -134,7 +134,7 @@
   /* ---------- Menu ---------- */
   function menu() {
     if (timer) clearInterval(timer);
-    var cont = {}; banco.forEach(function (q) { cont[q.tema] = (cont[q.tema] || 0) + 1; });
+    var cont = {}, gr = {}; banco.forEach(function (q) { if (q.grupo) { gr[q.grupo] = 1; return; } cont[q.tema] = (cont[q.tema] || 0) + 1; }); var nArv = Object.keys(gr).length;
     var hist = ler(HIST) || [];
     var temas = Object.keys(CONF.temas).map(function (k) {
       return '<button class="btn btn-sec" data-tema="' + k + '">' + esc(CONF.temas[k]) + ' <small>(' + (cont[k] || 0) + ')</small></button>';
@@ -147,33 +147,56 @@
       '<div class="sim-cab"><span class="eyebrow">Área do aluno · ' + CONF.nome + '</span><button class="btn btn-sm btn-sec" id="sair">Sair</button></div>' +
       '<h1>Olá! Seu banco tem <span class="marca">' + banco.length + ' questões</span></h1>' +
       '<div class="regras"><div><strong>' + CONF.totalSim + '</strong><span>questões no simulado</span></div><div><strong>' + (CONF.tempoMin / 60).toString().replace(".", ",") + ' h</strong><span>de tempo, como na prova</span></div><div><strong>' + Math.round(CONF.minimo * 100) + '%</strong><span>para passar</span></div></div>' +
-      '<h2>Simulado completo</h2><p>As questões são sorteadas a cada tentativa, nos pesos da prova: SFN 20%, Produtos 40%, Relacionamento 30% e Inovação 10%.</p>' +
+      '<h2>Simulado completo</h2><p>Igual à estrutura da prova: 40 questões de múltipla escolha sorteadas nos pesos dos temas (SFN 20%, Produtos 40%, Relacionamento 30%, Inovação 10%) e 10 questões em 5 árvores de diálogo, em que você conduz o atendimento em 5 etapas antes de responder.</p>' +
       '<div class="acoes"><button class="btn btn-grande" id="simulado">Modo prova real: ' + CONF.totalSim + ' questões</button><button class="btn btn-sec" id="simulado-livre">Modo livre (pode voltar)</button></div>' +
       '<p class="muted" style="font-size:.95rem">No <strong>modo prova real</strong> a questão trava assim que você avança, como na prova da ANBIMA: não dá para voltar nem revisar no final. Pular deixa a questão em branco. O <strong>modo livre</strong> permite voltar e trocar respostas.</p>' +
+      '<h2>Treino de árvores de diálogo</h2><p>2 atendimentos completos, com o comentário de cada etapa logo depois da sua escolha. São ' + nArv + ' árvores no banco.</p>' +
+      '<div class="acoes"><button class="btn btn-sec" id="treino-arvore">Treinar árvores de diálogo</button></div>' +
       '<h2>Treino por tema</h2><p>10 questões sorteadas do tema escolhido, com o comentário logo depois de cada resposta.</p>' +
       '<div class="acoes" style="flex-wrap:wrap">' + temas + '</div>' +
       '<h2>Seus últimos resultados</h2>' + histHtml +
       '</div>';
     document.getElementById("sair").onclick = sair;
-    document.getElementById("simulado").onclick = function () { iniciar(sortear(CONF.pesos), "Simulado · modo prova real", false, true); };
-    document.getElementById("simulado-livre").onclick = function () { iniciar(sortear(CONF.pesos), "Simulado · modo livre", false, false); };
+    document.getElementById("simulado").onclick = function () { iniciar(sortear(CONF.pesos, CONF.arvores), "Simulado · modo prova real", false, true); };
+    document.getElementById("simulado-livre").onclick = function () { iniciar(sortear(CONF.pesos, CONF.arvores), "Simulado · modo livre", false, false); };
     app.querySelectorAll("[data-tema]").forEach(function (b) {
-      b.onclick = function () { var k = b.getAttribute("data-tema"), p = {}; p[k] = 10; iniciar(sortear(p), "Treino · " + CONF.temas[k], true); };
+      b.onclick = function () { var k = b.getAttribute("data-tema"), p = {}; p[k] = 10; iniciar(sortear(p, 0), "Treino · " + CONF.temas[k], true); };
     });
+    document.getElementById("treino-arvore").onclick = function () { iniciar(sortear({}, 2), "Treino · Árvores de diálogo", true); };
     topo();
   }
-  function sortear(pesos) {
-    var lista = [];
-    Object.keys(pesos).forEach(function (k) { lista = lista.concat(misturar(banco.filter(function (q) { return q.tema === k; })).slice(0, pesos[k])); });
-    return misturar(lista).map(function (q) {
-      var ordem = misturar([0, 1, 2, 3]), alts = ordem.map(function (i) { return q.alternativas[i]; });
-      return { tema: q.tema, enunciado: q.enunciado, alternativas: alts, correta: alts.indexOf(q.alternativas[q.correta]), comentario: q.comentario };
+  function prepara(q) {
+    var ordem = misturar([0, 1, 2, 3]), alts = ordem.map(function (i) { return q.alternativas[i]; });
+    return { tema: q.tema, enunciado: q.enunciado, alternativas: alts, correta: alts.indexOf(q.alternativas[q.correta]), comentario: q.comentario, grupo: q.grupo || null };
+  }
+  function sortear(pesos, nArvores) {
+    var blocos = [];
+    Object.keys(pesos).forEach(function (k) {
+      misturar(banco.filter(function (q) { return q.tema === k && !q.grupo; })).slice(0, pesos[k]).forEach(function (q) { blocos.push([prepara(q)]); });
     });
+    if (nArvores) {
+      var grupos = {};
+      banco.forEach(function (q) { if (q.grupo) (grupos[q.grupo] = grupos[q.grupo] || []).push(q); });
+      misturar(Object.keys(grupos)).slice(0, nArvores).forEach(function (g) {
+        var qs = grupos[g].sort(function (a, b) { return a.numero - b.numero; });
+        var dlg = null; qs.forEach(function (q) { if (q.dialogo) dlg = q.dialogo; });
+        if (!dlg) return;
+        var etapas = dlg.etapas.map(function (e) {
+          var ordem = misturar([0, 1, 2, 3]), ops = ordem.map(function (i) { return e.opcoes[i]; });
+          return { fala: e.fala, opcoes: ops, correta: ops.indexOf(e.opcoes[e.correta]), comentario: e.comentario };
+        });
+        var bloco = qs.map(prepara);
+        bloco[0].dlg = { titulo: dlg.titulo, contexto: dlg.contexto, etapas: etapas };
+        bloco.forEach(function (q) { q.contexto = dlg.contexto; q.casoTitulo = dlg.titulo; });
+        blocos.push(bloco);
+      });
+    }
+    return [].concat.apply([], misturar(blocos));
   }
 
   /* ---------- Prova ---------- */
   function iniciar(qs, tipo, treino, real) {
-    var resp = new Array(qs.length).fill(null), inicio = Date.now(), limite = treino ? 0 : CONF.tempoMin * 60000;
+    var resp = new Array(qs.length).fill(null), dlgResp = {}, dlgFeito = {}, inicio = Date.now(), limite = treino ? 0 : CONF.tempoMin * 60000;
     if (timer) clearInterval(timer);
     timer = setInterval(function () {
       var el = document.getElementById("relogio"); if (!el) return;
@@ -181,7 +204,39 @@
       el.textContent = limite ? tempoFmt(limite - dec) : tempoFmt(dec);
       if (limite && dec >= limite) { clearInterval(timer); fim(); }
     }, 1000);
+    function dialogo(i, e) {
+      var q = qs[i], d = q.dlg, et = d.etapas[e], esc_ = (dlgResp[i] = dlgResp[i] || [])[e];
+      var r = esc_ === undefined ? null : esc_, ver = treino && r !== null;
+      var ops = et.opcoes.map(function (o, k) {
+        var cls = ver ? (k === et.correta ? " certa" : (k === r ? " errada" : "")) : "";
+        return '<button class="alt' + cls + '" data-k="' + k + '" aria-pressed="' + (r === k) + '"' + (ver ? " disabled" : "") + '><span class="bolha">' + LETRAS[k] + '</span><span>' + esc(o) + '</span></button>';
+      }).join("");
+      var hist = d.etapas.slice(0, e).map(function (x, j) {
+        var rr = dlgResp[i][j];
+        return '<div class="fala cliente"><span>Cliente</span>' + esc(x.fala) + '</div>' + (rr !== null && rr !== undefined ? '<div class="fala voce"><span>Você</span>' + esc(x.opcoes[rr]) + '</div>' : '<div class="fala voce vazia"><span>Você</span>(sem resposta)</div>');
+      }).join("");
+      app.innerHTML =
+        '<div class="sim-cab"><span class="eyebrow">' + esc(tipo) + ' · árvore de diálogo · etapa ' + (e + 1) + ' de ' + d.etapas.length + '</span><span class="relogio" id="relogio">' + (limite ? tempoFmt(limite - (Date.now() - inicio)) : tempoFmt(Date.now() - inicio)) + '</span></div>' +
+        '<div class="progresso"><i style="width:' + ((i + 1) / qs.length * 100) + '%"></i></div>' +
+        '<p class="tema-tag">Atendimento · ' + esc(d.titulo) + '</p>' +
+        '<div class="caso"><strong>Situação</strong><p>' + esc(d.contexto) + '</p></div>' +
+        '<div class="conversa">' + hist + '<div class="fala cliente atual"><span>Cliente</span>' + esc(et.fala) + '</div></div>' +
+        '<p class="enunciado" style="font-size:1rem">Qual é a resposta mais adequada?</p>' +
+        '<div class="alts" role="group" aria-label="Respostas">' + ops + '</div>' +
+        (ver ? '<div class="rev ' + (r === et.correta ? "certa" : "errada") + '" style="margin-top:16px"><p><strong>' + (r === et.correta ? "Boa condução!" : "Mais adequada: " + LETRAS[et.correta]) + '</strong></p><p class="coment">' + esc(et.comentario) + '</p></div>' : '') +
+        (real ? '<p class="muted" style="font-size:.9rem;margin-top:12px">Modo prova real: ao avançar, esta etapa fica travada.</p>' : '') +
+        '<div class="sim-nav"><button class="btn btn-sec" id="parar">Encerrar</button>' +
+        '<button class="btn" id="avancar"' + (r === null && !real ? " disabled" : "") + '>' + (r === null && real ? "Pular etapa" : "Continuar") + '</button></div>';
+      app.querySelectorAll(".alt").forEach(function (b) { b.onclick = function () { dlgResp[i][e] = Number(b.getAttribute("data-k")); dialogo(i, e); }; });
+      document.getElementById("avancar").onclick = function () {
+        if (dlgResp[i][e] === undefined) dlgResp[i][e] = null;
+        if (e + 1 < d.etapas.length) dialogo(i, e + 1); else { dlgFeito[i] = true; mostrar(i); }
+      };
+      document.getElementById("parar").onclick = function () { fim(); };
+      topo();
+    }
     function mostrar(i) {
+      if (qs[i].dlg && !dlgFeito[i]) return dialogo(i, (dlgResp[i] || []).length);
       var q = qs[i], r = resp[i], ver = treino && r !== null;
       var alts = q.alternativas.map(function (a, k) {
         var cls = ver ? (k === q.correta ? " certa" : (k === r ? " errada" : "")) : "";
@@ -191,7 +246,8 @@
       app.innerHTML =
         '<div class="sim-cab"><span class="eyebrow">' + esc(tipo) + ' · ' + (i + 1) + ' de ' + qs.length + '</span><span class="relogio" id="relogio">' + (limite ? tempoFmt(limite - (Date.now() - inicio)) : tempoFmt(Date.now() - inicio)) + '</span></div>' +
         '<div class="progresso"><i style="width:' + ((i + 1) / qs.length * 100) + '%"></i></div>' +
-        '<p class="tema-tag">' + esc(CONF.temas[q.tema]) + '</p>' +
+        '<p class="tema-tag">' + esc(CONF.temas[q.tema]) + (q.grupo ? ' · sobre o atendimento' : '') + '</p>' +
+        (q.contexto ? '<details class="caso"><summary>Rever a situação: ' + esc(q.casoTitulo) + '</summary><p>' + esc(q.contexto) + '</p></details>' : '') +
         '<p class="enunciado">' + esc(q.enunciado) + '</p>' +
         '<div class="alts" role="group" aria-label="Alternativas">' + alts + '</div>' +
         (ver ? '<div class="rev ' + (r === q.correta ? "certa" : "errada") + '" style="margin-top:16px"><p><strong>' + (r === q.correta ? "Certo!" : "Resposta correta: " + LETRAS[q.correta]) + '</strong></p><p class="coment">' + esc(q.comentario) + '</p></div>' : '') +
@@ -211,7 +267,8 @@
       clearInterval(timer);
       var a = 0, t = {};
       qs.forEach(function (q, i) { t[q.tema] = t[q.tema] || { c: 0, n: 0 }; t[q.tema].n++; if (resp[i] === q.correta) { a++; t[q.tema].c++; } });
-      var p = a / qs.length;
+      var p = a / qs.length, etOk = 0, etTot = 0;
+      qs.forEach(function (q, i) { if (q.dlg) q.dlg.etapas.forEach(function (et, j) { etTot++; if ((dlgResp[i] || [])[j] === et.correta) etOk++; }); });
       var hist = ler(HIST) || []; hist.unshift({ tipo: tipo, a: a, t: qs.length, p: p, d: Date.now() }); gravar(HIST, hist.slice(0, 30));
       var temasHtml = Object.keys(t).map(function (k) {
         var x = t[k], pp = x.c / x.n;
@@ -228,6 +285,7 @@
         '<h1>Você acertou ' + a + ' de ' + qs.length + ' (' + Math.round(p * 100) + '%)</h1>' +
         '<p class="lead">' + (p >= CONF.minimo ? "Acima do mínimo da prova. Continue treinando para chegar com folga." : "Abaixo dos " + Math.round(CONF.minimo * 100) + "% da prova. Revise os comentários e treine os temas com a barra vermelha.") + '</p>' +
         '<div class="temas-res">' + temasHtml + '</div>' +
+        (etTot ? '<p class="muted">Árvores de diálogo: você escolheu a condução mais adequada em <strong>' + etOk + ' de ' + etTot + '</strong> etapas. A nota acima conta as questões de múltipla escolha, incluindo as 2 de cada árvore.</p>' : '') +
         '<div class="acoes"><button class="btn" id="ir-inicio">Voltar ao início</button></div>' +
         '<h2>Gabarito comentado</h2><div class="revisao">' + revHtml + '</div>' +
         '<div class="acoes"><button class="btn btn-sec" id="ir-inicio2">Voltar ao início</button></div></div>';
