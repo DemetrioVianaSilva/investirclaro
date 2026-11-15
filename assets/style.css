@@ -431,3 +431,13 @@ details p { margin-top: 10px; color: var(--muted); }
 @media (max-width: 360px) { .topo .logo-txt { font-size: 18px; } .topo .logo svg { width: 28px; height: 28px; } }
 .campo input, .campo select { width: 100%; min-width: 0; }
 @media (max-width: 400px) { .campo-duplo { grid-template-columns: 1fr; } .painel { padding: 16px; } }
+
+/* Área do aluno */
+.alt.certa { border-color: var(--accent); background: var(--accent-soft); }
+.alt.errada, .alt.errada[aria-pressed="true"] { border-color: var(--erro); background: color-mix(in srgb, var(--erro) 12%, var(--surface)); }
+.alt.errada[aria-pressed="true"] .bolha { background: var(--erro); border-color: var(--erro); color: #fff; }
+.alt.certa .bolha { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.alt:disabled { cursor: default; opacity: 1; }
+.erro-msg { color: var(--erro); font-weight: 600; }
+#marca-agua { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; opacity: .05; font: 600 14px/3.2 var(--font-body); color: var(--ink); transform: rotate(-24deg) scale(1.6); word-break: break-all; user-select: none; }
+.area-aluno { -webkit-user-select: none; user-select: none; }

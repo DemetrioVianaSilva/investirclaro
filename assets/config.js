@@ -68,7 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (cfg.liberacao) el.textContent = cfg.liberacao;
     else { var box = el.closest("[data-prevenda]"); if (box) box.hidden = true; }
   });
-  document.querySelectorAll("[data-email]").forEach(function (el) { el.textContent = cfg.emailContato; });
+  window.icPreencherEmail = function () { document.querySelectorAll("[data-email]").forEach(function (el) { el.textContent = cfg.emailContato; }); };
+  window.icPreencherEmail();
 
   /* Newsletter (data-news): salva na mesma tabela de leads com prova = "newsletter" */
   document.querySelectorAll("form[data-news]").forEach(function (f) {
