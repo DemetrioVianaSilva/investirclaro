@@ -86,7 +86,7 @@
       '<h1>Enviamos o acesso para ' + esc(email) + '</h1>' +
       '<p class="lead">Abra o e-mail e toque no link para entrar. Se não aparecer, olhe também no spam e nas promoções.</p>' +
       (msg ? '<p class="erro-msg">' + esc(msg) + '</p>' : '') +
-      '<form id="f-cod" class="pilha" novalidate><div class="campo"><label for="cod">Recebeu um código de 6 dígitos? Digite aqui</label><input id="cod" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000"></div>' +
+      '<form id="f-cod" class="pilha" novalidate><div class="campo"><label for="cod">Recebeu o código por e-mail? Digite aqui</label><input id="cod" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="Código do e-mail"></div>' +
       '<button class="btn" type="submit">Entrar com o código</button></form>' +
       '<button class="btn btn-sec" id="outro">Usar outro e-mail</button>' +
       '</div>';
@@ -94,7 +94,7 @@
     document.getElementById("f-cod").onsubmit = function (ev) {
       ev.preventDefault();
       var cod = document.getElementById("cod").value.replace(/\D/g, "");
-      if (cod.length !== 6) return enviado(email, "O código tem 6 números.");
+      if (cod.length < 6 || cod.length > 10) return enviado(email, "Confira o código: ele tem os números que chegaram no e-mail.");
       api("/auth/v1/verify", { method: "POST", body: { type: "email", email: email, token: cod } })
         .then(function (d) { salvarSessao(d); carregar(); })
         .catch(function () { enviado(email, "Código inválido ou expirado. Peça um novo link."); });
