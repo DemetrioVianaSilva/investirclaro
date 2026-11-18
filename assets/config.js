@@ -6,7 +6,8 @@ window.APROVA_CONFIG = {
   checkout: {
     "cpa": "https://pay.hotmart.com/L108503808F",
     "cpro-r": "https://pay.hotmart.com/SEU_CODIGO_CPRO_R",
-    "planilha": "https://pay.hotmart.com/D108477807B"
+    "planilha": "https://pay.hotmart.com/D108477807B",
+    "dividas": "https://pay.hotmart.com/I108551417Y"
   },
 
   // Data em que o acesso pago é liberado (pré-venda). Deixe "" quando o produto já estiver pronto.
