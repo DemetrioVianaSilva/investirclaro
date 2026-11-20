@@ -473,3 +473,6 @@ details p { margin-top: 10px; color: var(--muted); }
 .fala.cliente.atual { border-color: var(--accent); }
 .fala.voce { align-self: flex-end; background: var(--accent-soft); }
 .fala.vazia { color: var(--muted); font-style: italic; }
+
+/* Mantém nomes como "C-Pro R" inteiros no destaque do título */
+.marca { white-space: nowrap; }
