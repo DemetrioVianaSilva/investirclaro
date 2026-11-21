@@ -59,12 +59,7 @@ window.APROVA_SIMULADO = {
     {
       tema: "analise",
       enunciado: "Júlia tem 28 anos, renda estável, reserva de emergência formada e objetivo de aposentadoria daqui a 30 anos. Em qual fase do ciclo de vida ela está?",
-      alternativas: [
-        "Acumulação, com horizonte longo que permite maior exposição a risco se o perfil indicar",
-        "Consolidação, com foco em preservar o patrimônio",
-        "Aposentadoria, com foco em gerar renda",
-        "Usufruto, com resgates programados"
-      ],
+      alternativas: ["Acumulação, com horizonte longo que comporta mais risco", "Consolidação, com foco em preservar o que já acumulou", "Aposentadoria, com foco em gerar renda mensal", "Usufruto, com resgates programados do patrimônio"],
       correta: 0,
       comentario: "Na fase de acumulação, o horizonte longo permite suportar mais volatilidade em busca de retorno, desde que o perfil de suitability confirme essa tolerância."
     },
@@ -78,12 +73,7 @@ window.APROVA_SIMULADO = {
     {
       tema: "indicacao",
       enunciado: "Um cliente comprou Tesouro Prefixado 2031 e, após uma alta nos juros de mercado, viu o saldo do título cair. Qual é a explicação correta a ser dada a ele?",
-      alternativas: [
-        "O Tesouro deu calote parcial e o cliente perdeu parte do principal",
-        "A queda é efeito da marcação a mercado; se mantiver até o vencimento, recebe a taxa contratada",
-        "O título passou a ser pós-fixado após a alta de juros",
-        "A queda é cobrança de IR antecipado"
-      ],
+      alternativas: ["O Tesouro deu calote parcial e o cliente perdeu parte do principal", "Marcação a mercado; no vencimento ele recebe a taxa contratada", "O título passou a ser pós-fixado depois da alta de juros", "O saldo caiu porque o IR foi cobrado de forma antecipada"],
       correta: 1,
       comentario: "Quando os juros sobem, o preço de títulos prefixados cai na marcação a mercado. A perda só se realiza se o título for vendido antes do vencimento."
     },
@@ -97,12 +87,7 @@ window.APROVA_SIMULADO = {
     {
       tema: "indicacao",
       enunciado: "Sérgio tem R$ 200.000 para aplicar por 4 anos. O gerente oferece uma debênture de uma distribuidora de energia, com taxa acima do CDB de mesmo prazo do próprio banco. Sérgio pergunta se, como no CDB, o valor fica garantido pelo FGC. A resposta adequada é:",
-      alternativas: [
-        "A debênture não tem cobertura do FGC; o risco de crédito é da empresa emissora, e isso ajuda a explicar a taxa maior",
-        "Sim, até R$ 250 mil por CPF, nas mesmas condições do CDB",
-        "Sim, porque a distribuição é feita por um banco coberto pelo FGC",
-        "A cobertura vale para a debênture apenas se ela for mantida até o vencimento"
-      ],
+      alternativas: ["Não. Debênture não tem FGC; o risco de crédito é da empresa emissora", "Sim, até R$ 250 mil por CPF, nas mesmas condições do CDB", "Sim, porque a distribuição é feita por um banco coberto pelo FGC", "Só tem FGC se a debênture for mantida até o vencimento"],
       correta: 0,
       comentario: "Debêntures são dívida de empresas e não têm garantia do FGC, mesmo quando distribuídas por um banco. Por isso o rating, as garantias da emissão e a concentração por emissor precisam entrar na análise."
     },
@@ -145,24 +130,14 @@ window.APROVA_SIMULADO = {
     {
       tema: "indicacao",
       enunciado: "Um cliente faz a declaração simplificada do IR e quer acumular para a aposentadoria via previdência. O plano mais indicado é:",
-      alternativas: [
-        "PGBL, pela dedução de até 12% da renda",
-        "VGBL, porque o IR incide só sobre os rendimentos e ele não aproveitaria a dedução do PGBL",
-        "PGBL, porque o IR incide só sobre os rendimentos",
-        "Nenhum, pois previdência exige declaração completa"
-      ],
+      alternativas: ["PGBL, pela dedução de até 12% da renda bruta tributável", "VGBL, porque sem declaração completa ele não aproveita a dedução", "PGBL, porque nele o IR incide só sobre os rendimentos", "PGBL, porque a dedução vale também na declaração simplificada"],
       correta: 1,
       comentario: "A dedução do PGBL só vale na declaração completa. Sem ela, o VGBL é mais eficiente, porque no resgate o IR incide apenas sobre os rendimentos, e não sobre o valor total."
     },
     {
       tema: "indicacao",
       enunciado: "Henrique, perfil conservador, recebeu a oferta de um COE com capital protegido, atrelado a um índice de ações americano, com prazo de 3 anos. Ele conclui que, por ter capital protegido, o risco é o mesmo da poupança. A explicação adequada é:",
-      alternativas: [
-        "A proteção depende da capacidade de pagamento do emissor, o COE não tem cobertura do FGC e a saída antes do vencimento pode gerar perda",
-        "O COE é coberto pelo FGC até R$ 250 mil, assim como a poupança",
-        "O COE garante, no mínimo, a variação do CDI no período",
-        "A proteção cobre o valor aplicado corrigido pela inflação do período"
-      ],
+      alternativas: ["A proteção depende do emissor, não há FGC e sair antes pode dar perda", "O COE é coberto pelo FGC até R$ 250 mil, assim como a poupança", "O COE garante, no mínimo, a variação do CDI em todo o período", "A proteção cobre o valor aplicado corrigido pela inflação do período"],
       correta: 0,
       comentario: "Capital protegido é uma promessa do emissor: existe risco de crédito e não há FGC. A proteção vale no vencimento, e no cenário desfavorável o retorno pode ser zero, ou seja, perda real para a inflação."
     },
@@ -188,12 +163,7 @@ window.APROVA_SIMULADO = {
     {
       tema: "portfolio",
       enunciado: "Na estratégia de rebalanceamento constant mix, quando a renda variável sobe e passa a ocupar uma fatia maior que a definida, o investidor deve:",
-      alternativas: [
-        "Comprar mais renda variável para aproveitar a tendência",
-        "Não fazer nada até o fim do ano",
-        "Vender parte da renda variável e comprar o que ficou abaixo da proporção-alvo",
-        "Migrar toda a carteira para renda fixa"
-      ],
+      alternativas: ["Comprar mais renda variável para aproveitar a tendência de alta", "Esperar o fim do ano para avaliar se vale mexer na carteira", "Vender parte da renda variável e comprar o que ficou abaixo do alvo", "Reduzir o alvo de renda fixa para acompanhar a nova proporção"],
       correta: 2,
       comentario: "No constant mix, a carteira volta sempre às proporções-alvo: vende o que subiu e compra o que caiu. Buy and hold não rebalanceia, e o CPPI aumenta a exposição ao risco quando a carteira sobe."
     },
@@ -228,12 +198,7 @@ window.APROVA_SIMULADO = {
     {
       tema: "prospeccao",
       enunciado: "Um novo cliente chega à agência dizendo que quer aplicar R$ 50.000 em um fundo multimercado que viu em uma propaganda. Antes de recomendar qualquer produto, o procedimento adequado do profissional é:",
-      alternativas: [
-        "Verificar a adequação ao perfil, considerando objetivos, horizonte, situação financeira e conhecimento do cliente",
-        "Recomendar o fundo pedido, porque a iniciativa partiu do próprio cliente",
-        "Recomendar apenas poupança até o cliente completar um ano de relacionamento",
-        "Pedir a assinatura de um termo de ciência de risco e dispensar a análise de perfil"
-      ],
+      alternativas: ["Verificar a adequação ao perfil: objetivos, horizonte, situação e conhecimento", "Recomendar o fundo pedido, porque a iniciativa partiu do próprio cliente", "Recomendar só poupança até o cliente completar um ano de relacionamento", "Pedir um termo de ciência de risco e dispensar a análise de perfil"],
       correta: 0,
       comentario: "Pela Resolução CVM 30, a recomendação depende da verificação de adequação (suitability): objetivos, situação financeira e conhecimento do cliente. O termo de ciência não substitui essa análise."
     },
@@ -261,12 +226,7 @@ window.APROVA_SIMULADO = {
     {
       tema: "analise",
       enunciado: "Cláudia, 35 anos, tem perfil arrojado pelo questionário de suitability. Ela tem R$ 80.000 que serão usados como entrada de um apartamento daqui a 10 meses. Para esse recurso, a orientação adequada é:",
-      alternativas: [
-        "Considerar o horizonte curto do objetivo e indicar aplicações de baixa volatilidade e liquidez compatível com a data da compra",
-        "Indicar ações, porque o perfil arrojado permite assumir risco com todo o patrimônio",
-        "Indicar um título prefixado com vencimento em 5 anos, que paga a maior taxa",
-        "Indicar um plano de previdência, pelo benefício fiscal no longo prazo"
-      ],
+      alternativas: ["Indicar ativos de baixa oscilação, com liquidez até a data da compra", "Indicar ações, porque o perfil arrojado permite assumir mais risco", "Indicar um prefixado de 5 anos, que paga a maior taxa disponível", "Indicar previdência, pelo benefício fiscal que ela oferece"],
       correta: 0,
       comentario: "O perfil mostra a tolerância a risco, mas cada objetivo tem seu horizonte. Dinheiro com data marcada em 10 meses não pode depender de oscilações nem ficar preso em um vencimento posterior."
     },
@@ -328,12 +288,7 @@ window.APROVA_SIMULADO = {
     {
       tema: "indicacao",
       enunciado: "Marcos fez apenas operações comuns no mês e vendeu R$ 18.000 em ações, com lucro de R$ 3.000. Sobre esse lucro:",
-      alternativas: [
-        "Não há IR, porque o total de vendas no mês ficou abaixo de R$ 20.000",
-        "Há IR de 15%, ou seja, R$ 450",
-        "Há IR de 20%, ou seja, R$ 600",
-        "Há IR de 15% sobre o total vendido"
-      ],
+      alternativas: ["Não há IR, pois as vendas do mês ficaram abaixo de R$ 20 mil", "Há IR de 15% sobre o lucro de R$ 3.000, ou seja, R$ 450", "Há IR de 20% sobre o lucro de R$ 3.000, ou seja, R$ 600", "Há IR de 15% sobre o total vendido, ou seja, R$ 2.700"],
       correta: 0,
       comentario: "Em operações comuns com ações, a pessoa física tem isenção de IR quando o total de vendas no mês não passa de R$ 20.000. Acima disso, o lucro é tributado em 15%. Day trade não tem essa isenção."
     },
@@ -371,12 +326,7 @@ window.APROVA_SIMULADO = {
     {
       tema: "portfolio",
       enunciado: "Sérgio, 58 anos, vai se aposentar daqui a 2 anos e começará a resgatar parte da carteira para complementar a renda. Hoje, 70% dela está em ações. A orientação adequada é:",
-      alternativas: [
-        "Revisar o perfil e reduzir gradualmente a exposição a risco, alinhando a liquidez ao início dos resgates",
-        "Manter a alocação, porque ações rendem mais no longo prazo",
-        "Aumentar a parcela em ações para acelerar o crescimento antes da aposentadoria",
-        "Vender toda a renda variável de uma vez, sem considerar tributação nem preço"
-      ],
+      alternativas: ["Reduzir aos poucos a exposição a risco, alinhando a liquidez aos resgates", "Manter a alocação, porque ações rendem mais no longo prazo", "Aumentar a parcela em ações para acelerar o crescimento até lá", "Vender toda a renda variável de uma vez, sem olhar preço ou imposto"],
       correta: 0,
       comentario: "A aposentadoria é um evento de vida que muda o horizonte e a necessidade de liquidez. A transição gradual reduz o risco de precisar vender na baixa e permite planejar a tributação."
     },
