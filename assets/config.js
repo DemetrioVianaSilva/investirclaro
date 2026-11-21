@@ -5,7 +5,7 @@ window.APROVA_CONFIG = {
   // Links de checkout da Hotmart (Produtos > seu produto > Links)
   checkout: {
     "cpa": "https://pay.hotmart.com/L108503808F",
-    "cpro-r": "https://pay.hotmart.com/SEU_CODIGO_CPRO_R",
+    "cpro-r": "https://pay.hotmart.com/S108601356Q",
     "planilha": "https://pay.hotmart.com/D108477807B",
     "dividas": "https://pay.hotmart.com/I108551417Y"
   },
