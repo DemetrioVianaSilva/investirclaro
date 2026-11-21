@@ -11,7 +11,14 @@
     cpa: {
       nome: "CPA", minimo: 0.70, totalSim: 50, tempoMin: 150,
       temas: { sfn: "Estrutura e dinâmica do SFN", produtos: "Produtos do mercado financeiro", relacionamento: "Relacionamento com o cliente", inovacao: "Inovação e desenvolvimento de mercado" },
-      pesos: { sfn: 8, produtos: 16, relacionamento: 12, inovacao: 4 }, arvores: 5
+      pesos: { sfn: 8, produtos: 16, relacionamento: 12, inovacao: 4 }, arvores: 5,
+      descricao: "Igual à estrutura da prova: 40 questões de múltipla escolha sorteadas nos pesos dos temas (SFN 20%, Produtos 40%, Relacionamento 30%, Inovação 10%) e 10 questões em 5 árvores de diálogo, em que você conduz o atendimento em 5 etapas antes de responder."
+    },
+    "cpro-r": {
+      nome: "C-Pro R", minimo: 0.71, totalSim: 45, tempoMin: 150,
+      temas: { prospeccao: "Prospecção e relacionamento", analise: "Análise de informações do cliente", indicacao: "Indicação de investimentos", portfolio: "Portfólio e monitoramento" },
+      pesos: { prospeccao: 9, analise: 9, indicacao: 18, portfolio: 9 }, arvores: 0,
+      descricao: "Igual à estrutura da prova: 45 questões sorteadas nos pesos do programa (Prospecção 20%, Análise do cliente 20%, Indicação de investimentos 40%, Portfólio 20%), com casos de clientes e cálculos no formato da prova."
     }
   }[PROVA];
   var LETRAS = ["A", "B", "C", "D"];
@@ -147,11 +154,11 @@
       '<div class="sim-cab"><span class="eyebrow">Área do aluno · ' + CONF.nome + '</span><button class="btn btn-sm btn-sec" id="sair">Sair</button></div>' +
       '<h1>Olá! Seu banco tem <span class="marca">' + banco.length + ' questões</span></h1>' +
       '<div class="regras"><div><strong>' + CONF.totalSim + '</strong><span>questões no simulado</span></div><div><strong>' + (CONF.tempoMin / 60).toString().replace(".", ",") + ' h</strong><span>de tempo, como na prova</span></div><div><strong>' + Math.round(CONF.minimo * 100) + '%</strong><span>para passar</span></div></div>' +
-      '<h2>Simulado completo</h2><p>Igual à estrutura da prova: 40 questões de múltipla escolha sorteadas nos pesos dos temas (SFN 20%, Produtos 40%, Relacionamento 30%, Inovação 10%) e 10 questões em 5 árvores de diálogo, em que você conduz o atendimento em 5 etapas antes de responder.</p>' +
+      '<h2>Simulado completo</h2><p>' + esc(CONF.descricao) + '</p>' +
       '<div class="acoes"><button class="btn btn-grande" id="simulado">Modo prova real: ' + CONF.totalSim + ' questões</button><button class="btn btn-sec" id="simulado-livre">Modo livre (pode voltar)</button></div>' +
       '<p class="muted" style="font-size:.95rem">No <strong>modo prova real</strong> a questão trava assim que você avança, como na prova da ANBIMA: não dá para voltar nem revisar no final. Pular deixa a questão em branco. O <strong>modo livre</strong> permite voltar e trocar respostas.</p>' +
-      '<h2>Treino de árvores de diálogo</h2><p>2 atendimentos completos, com o comentário de cada etapa logo depois da sua escolha. São ' + nArv + ' árvores no banco.</p>' +
-      '<div class="acoes"><button class="btn btn-sec" id="treino-arvore">Treinar árvores de diálogo</button></div>' +
+      (nArv ? '<h2>Treino de árvores de diálogo</h2><p>2 atendimentos completos, com o comentário de cada etapa logo depois da sua escolha. São ' + nArv + ' árvores no banco.</p>' +
+      '<div class="acoes"><button class="btn btn-sec" id="treino-arvore">Treinar árvores de diálogo</button></div>' : '') +
       '<h2>Treino por tema</h2><p>10 questões sorteadas do tema escolhido, com o comentário logo depois de cada resposta.</p>' +
       '<div class="acoes" style="flex-wrap:wrap">' + temas + '</div>' +
       '<h2>Seus últimos resultados</h2>' + histHtml +
@@ -162,7 +169,7 @@
     app.querySelectorAll("[data-tema]").forEach(function (b) {
       b.onclick = function () { var k = b.getAttribute("data-tema"), p = {}; p[k] = 10; iniciar(sortear(p, 0), "Treino · " + CONF.temas[k], true); };
     });
-    document.getElementById("treino-arvore").onclick = function () { iniciar(sortear({}, 2), "Treino · Árvores de diálogo", true); };
+    if (nArv) document.getElementById("treino-arvore").onclick = function () { iniciar(sortear({}, 2), "Treino · Árvores de diálogo", true); };
     topo();
   }
   function prepara(q) {
