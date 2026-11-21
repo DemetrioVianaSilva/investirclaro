@@ -15,13 +15,13 @@ window.APROVA_CONFIG = {
 
   // Captura de leads no Supabase (tabela "leads"; SQL no README.md).
   // Use a chave "anon" pública. Deixe vazio para não salvar leads.
-  supabaseUrl: "",
-  supabaseAnonKey: "",
+  supabaseUrl: "https://potnmbimyemwjwmsfdet.supabase.co",
+  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBvdG5tYmlteWVtd2p3bXNmZGV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1ODE3MTMsImV4cCI6MjExMDE1NzcxM30.jCOZeBYpqcMVx62umWtidTzxYF1jkgbSJOn2YJqLU0M",
 
   // Google Ads: ID da tag (AW-XXXXXXXXX) e rótulos das conversões
   googleAdsId: "AW-18484684141",
   conversoes: {
-    lead: "",          // ex.: "AW-123456789/AbCdEfGh" — disparada ao enviar o e-mail no simulado
+    lead: "AW-18484684141/G9xlCN6H4LwdEO3Kl-5E",          // ex.: "AW-123456789/AbCdEfGh" — disparada ao enviar o e-mail no simulado
     cliqueCheckout: "AW-18484684141/7ktbCJvw2LgdEO3Kl-5E" // disparada ao clicar em comprar
   },
 
