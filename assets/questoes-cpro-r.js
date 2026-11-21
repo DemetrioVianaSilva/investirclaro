@@ -23,10 +23,10 @@ window.APROVA_SIMULADO = {
     },
     {
       tema: "prospeccao",
-      enunciado: "Pesquisas mostram que a dor de perder R$ 1.000 é sentida com mais intensidade do que o prazer de ganhar R$ 1.000. Esse fenômeno é chamado de:",
-      alternativas: ["Aversão ao risco", "Aversão à perda", "Efeito framing", "Viés de status quo"],
-      correta: 1,
-      comentario: "Aversão à perda, um dos pilares da teoria do prospecto: perdas pesam mais que ganhos equivalentes. É diferente de aversão ao risco, que é a preferência por resultados mais previsíveis."
+      enunciado: "Lúcia precisa resgatar R$ 10.000. Ela tem um fundo com ganho de 30% e uma ação com perda de 25%, sem mudança relevante na tese de nenhum dos dois. Decide vender o fundo \"para garantir o lucro\" e manter a ação \"até ela voltar ao preço de compra\". Esse comportamento é conhecido como:",
+      alternativas: ["Efeito disposição", "Viés de disponibilidade", "Efeito manada", "Excesso de confiança"],
+      correta: 0,
+      comentario: "Efeito disposição: vender cedo o que está no lucro e segurar o que está no prejuízo. Ele nasce da aversão à perda, porque realizar o prejuízo dói mais do que deixar de ganhar. A decisão deveria olhar as perspectivas de cada ativo, não o preço de compra."
     },
     {
       tema: "prospeccao",
@@ -96,10 +96,15 @@ window.APROVA_SIMULADO = {
     },
     {
       tema: "indicacao",
-      enunciado: "Qual dos investimentos abaixo NÃO conta com a garantia do FGC?",
-      alternativas: ["CDB", "LCA", "Poupança", "Debênture"],
-      correta: 3,
-      comentario: "Debêntures são títulos de dívida de empresas e não têm cobertura do FGC. O risco de crédito é do emissor, por isso o rating e as garantias da emissão importam."
+      enunciado: "Sérgio tem R$ 200.000 para aplicar por 4 anos. O gerente oferece uma debênture de uma distribuidora de energia, com taxa acima do CDB de mesmo prazo do próprio banco. Sérgio pergunta se, como no CDB, o valor fica garantido pelo FGC. A resposta adequada é:",
+      alternativas: [
+        "A debênture não tem cobertura do FGC; o risco de crédito é da empresa emissora, e isso ajuda a explicar a taxa maior",
+        "Sim, até R$ 250 mil por CPF, nas mesmas condições do CDB",
+        "Sim, porque a distribuição é feita por um banco coberto pelo FGC",
+        "A cobertura vale para a debênture apenas se ela for mantida até o vencimento"
+      ],
+      correta: 0,
+      comentario: "Debêntures são dívida de empresas e não têm garantia do FGC, mesmo quando distribuídas por um banco. Por isso o rating, as garantias da emissão e a concentração por emissor precisam entrar na análise."
     },
     {
       tema: "indicacao",
@@ -151,15 +156,15 @@ window.APROVA_SIMULADO = {
     },
     {
       tema: "indicacao",
-      enunciado: "Sobre um COE com capital protegido, é correto afirmar que:",
+      enunciado: "Henrique, perfil conservador, recebeu a oferta de um COE com capital protegido, atrelado a um índice de ações americano, com prazo de 3 anos. Ele conclui que, por ter capital protegido, o risco é o mesmo da poupança. A explicação adequada é:",
       alternativas: [
-        "É coberto pelo FGC até R$ 250 mil",
-        "Não tem nenhum tipo de risco",
-        "A proteção depende da capacidade de pagamento do emissor, e o produto não é coberto pelo FGC",
-        "Garante rentabilidade mínima igual ao CDI"
+        "A proteção depende da capacidade de pagamento do emissor, o COE não tem cobertura do FGC e a saída antes do vencimento pode gerar perda",
+        "O COE é coberto pelo FGC até R$ 250 mil, assim como a poupança",
+        "O COE garante, no mínimo, a variação do CDI no período",
+        "A proteção cobre o valor aplicado corrigido pela inflação do período"
       ],
-      correta: 2,
-      comentario: "A proteção do capital é uma promessa do emissor, por isso existe risco de crédito. O COE não tem garantia do FGC e pode render zero no cenário desfavorável."
+      correta: 0,
+      comentario: "Capital protegido é uma promessa do emissor: existe risco de crédito e não há FGC. A proteção vale no vencimento, e no cenário desfavorável o retorno pode ser zero, ou seja, perda real para a inflação."
     },
     {
       tema: "portfolio",
@@ -175,10 +180,10 @@ window.APROVA_SIMULADO = {
     },
     {
       tema: "portfolio",
-      enunciado: "O risco que NÃO pode ser eliminado pela diversificação da carteira é o:",
-      alternativas: ["Risco específico de uma empresa", "Risco não sistemático", "Risco sistemático", "Risco de concentração"],
-      correta: 2,
-      comentario: "O risco sistemático (de mercado) afeta todos os ativos, como mudanças de juros ou recessões. A diversificação reduz apenas o risco específico, ou não sistemático."
+      enunciado: "Bruno concentrava toda a carteira de ações em um único banco listado. Ele redistribui o valor entre 20 empresas de setores diferentes, mantendo o mesmo percentual em renda variável. Com essa mudança, o risco que tende a diminuir de forma relevante é o:",
+      alternativas: ["Risco específico, ou não sistemático", "Risco sistemático, ou de mercado", "Risco de juros da economia", "Risco de recessão do país"],
+      correta: 0,
+      comentario: "A diversificação reduz o risco específico de cada empresa. O risco sistemático, ligado a juros, recessão e ao mercado como um todo, continua, porque afeta quase todos os ativos ao mesmo tempo."
     },
     {
       tema: "portfolio",
