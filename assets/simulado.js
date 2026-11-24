@@ -47,7 +47,7 @@
     return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; });
   }
   function utms() {
-    var p = new URLSearchParams(location.search), o = {};
+    var p = new URLSearchParams(location.search), o = window.icOrigem ? window.icOrigem() : {};
     ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid"].forEach(function (k) { if (p.get(k)) o[k] = p.get(k); });
     return o;
   }

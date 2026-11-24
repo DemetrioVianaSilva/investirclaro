@@ -48,6 +48,23 @@ window.aprovaConverter = function (tipo) {
 };
 
 /* Liga botões de compra (data-checkout="cpa" | "cpro-r") e textos de liberação */
+/* Origem da visita: guarda UTMs e gclid da página de entrada (30 dias), para o lead e a venda não perderem a origem ao trocar de página */
+(function () {
+  var CH = "ic_origem", campos = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid"];
+  var p = new URLSearchParams(location.search), novo = {};
+  campos.forEach(function (k) { if (p.get(k)) novo[k] = p.get(k).slice(0, 200); });
+  try {
+    if (Object.keys(novo).length) { novo.t = Date.now(); localStorage.setItem(CH, JSON.stringify(novo)); }
+  } catch (e) {}
+  window.icOrigem = function () {
+    try {
+      var o = JSON.parse(localStorage.getItem(CH) || "null");
+      if (o && Date.now() - o.t < 30 * 864e5) { var r = {}; campos.forEach(function (k) { if (o[k]) r[k] = o[k]; }); return r; }
+    } catch (e) {}
+    return {};
+  };
+})();
+
 document.addEventListener("DOMContentLoaded", function () {
   var cfg = window.APROVA_CONFIG;
   document.querySelectorAll("[data-checkout]").forEach(function (a) {
@@ -60,6 +77,9 @@ document.addEventListener("DOMContentLoaded", function () {
       a.removeAttribute("data-checkout");
       return;
     }
+    /* src na Hotmart mostra a origem da venda no relatório (gads = veio de anúncio do Google) */
+    var o = window.icOrigem(), src = o.gclid ? "gads" : (o.utm_source || "");
+    if (src) url += (url.indexOf("?") >= 0 ? "&" : "?") + "src=" + encodeURIComponent(src.replace(/[^\w-]/g, "").slice(0, 30));
     a.href = url;
     a.target = "_blank";
     a.rel = "noopener";
