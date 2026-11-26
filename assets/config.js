@@ -92,6 +92,14 @@ document.addEventListener("DOMContentLoaded", function () {
   window.icPreencherEmail = function () { document.querySelectorAll("[data-email]").forEach(function (el) { el.textContent = cfg.emailContato; }); };
   window.icPreencherEmail();
 
+  /* Barra de compra fixa no celular: aparece depois do topo e some quando a oferta está na tela */
+  (function () {
+    var bar = document.querySelector("[data-barra-compra]"), of = document.getElementById("oferta");
+    if (!bar || !of) return;
+    function f() { var r = of.getBoundingClientRect(); bar.hidden = !(window.scrollY > 500 && (r.top > window.innerHeight || r.bottom < 0)); }
+    addEventListener("scroll", f, { passive: true }); f();
+  })();
+
   /* Newsletter (data-news): salva na mesma tabela de leads com prova = "newsletter" */
   document.querySelectorAll("form[data-news]").forEach(function (f) {
     f.addEventListener("submit", function (e) {

@@ -482,3 +482,11 @@ details p { margin-top: 10px; color: var(--muted); }
 .autor { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
 .autor img { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; box-shadow: 0 0 0 3px var(--accent-soft); }
 .autor h2 { flex: 1 1 240px; min-width: 0; margin: 0; }
+.ancora{margin:0 0 6px;padding:10px 14px;border-left:4px solid var(--marca);background:var(--accent-soft);border-radius:8px;font-size:.95rem}
+.exemplo ol{margin:12px 0;padding-left:28px;display:grid;gap:6px}
+.exemplo details{margin-top:10px}
+.exemplo summary{cursor:pointer;font-weight:600}
+.barra-compra{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:var(--surface,var(--bg));border-top:1px solid var(--line,rgba(127,127,127,.25));box-shadow:0 -6px 20px rgba(0,0,0,.18)}
+.barra-compra span{font-weight:700;font-size:1.15rem}
+.barra-compra[hidden]{display:none}
+@media (min-width:860px){.barra-compra{display:none!important}}
