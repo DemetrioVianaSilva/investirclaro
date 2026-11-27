@@ -490,3 +490,5 @@ details p { margin-top: 10px; color: var(--muted); }
 .barra-compra span{font-weight:700;font-size:1.15rem}
 .barra-compra[hidden]{display:none}
 @media (min-width:860px){.barra-compra{display:none!important}}
+.faixa-oferta{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0;padding:0}
+.faixa-oferta span{font-size:.9rem;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--accent-soft);color:var(--ink)}
