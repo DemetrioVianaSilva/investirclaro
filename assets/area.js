@@ -162,6 +162,7 @@
       '<h2>Treino por tema</h2><p>10 questões sorteadas do tema escolhido, com o comentário logo depois de cada resposta.</p>' +
       '<div class="acoes" style="flex-wrap:wrap">' + temas + '</div>' +
       '<h2>Seus últimos resultados</h2>' + histHtml +
+      '<p class="muted" style="font-size:.85rem;margin-top:24px">Acesso pessoal e intransferível de ' + esc(sessao.email || "") + '. O conteúdo é protegido pela Lei 9.610/1998: é proibido copiar, compartilhar ou revender as questões. <a href="../termos.html">Termos de uso</a>.</p>' +
       '</div>';
     document.getElementById("sair").onclick = sair;
     document.getElementById("simulado").onclick = function () { iniciar(sortear(CONF.pesos, CONF.arvores), "Simulado · modo prova real", false, true); };
