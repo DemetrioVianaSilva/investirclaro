@@ -25,6 +25,9 @@ window.APROVA_CONFIG = {
     cliqueCheckout: "AW-18484684141/7ktbCJvw2LgdEO3Kl-5E" // disparada ao clicar em comprar
   },
 
+  // Pixel da Meta (Gerenciador de Eventos > Conjuntos de dados). Deixe "" para desligar.
+  metaPixelId: "2582991908881606",
+
   emailContato: "demetriovianasilva@gmail.com"
 };
 
@@ -42,9 +45,33 @@ window.APROVA_CONFIG = {
   gtag("config", id);
 })();
 
-window.aprovaConverter = function (tipo) {
+/* Pixel da Meta: PageView em todas as páginas e ViewContent nas páginas de produto */
+(function () {
+  var id = window.APROVA_CONFIG.metaPixelId;
+  if (!id || window.fbq) return;
+  var n = window.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+  if (!window._fbq) window._fbq = n;
+  n.push = n; n.loaded = true; n.version = "2.0"; n.queue = [];
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://connect.facebook.net/en_US/fbevents.js";
+  document.head.appendChild(s);
+  fbq("init", id);
+  fbq("track", "PageView");
+  var m = location.pathname.match(/certificacoes\/(cpa|cpro-r)\/?$|ferramentas\/planilha|ebooks\/guia/);
+  if (m) fbq("track", "ViewContent", { content_name: m[1] || m[0], content_type: "product" });
+})();
+
+/* Valores usados nos eventos de compra iniciada */
+var IC_PRECOS = { "cpa": 97, "cpro-r": 147, "planilha": 26.99, "dividas": 19.9 };
+
+window.aprovaConverter = function (tipo, produto) {
   var c = window.APROVA_CONFIG.conversoes[tipo];
   if (c && window.gtag) window.gtag("event", "conversion", { send_to: c });
+  if (window.fbq) {
+    if (tipo === "lead") window.fbq("track", "Lead", { content_name: produto || "" });
+    if (tipo === "cliqueCheckout") window.fbq("track", "InitiateCheckout", { content_name: produto || "", value: IC_PRECOS[produto] || 0, currency: "BRL" });
+  }
 };
 
 /* Liga botões de compra (data-checkout="cpa" | "cpro-r") e textos de liberação */
@@ -83,7 +110,8 @@ document.addEventListener("DOMContentLoaded", function () {
     a.href = url;
     a.target = "_blank";
     a.rel = "noopener";
-    a.addEventListener("click", function () { window.aprovaConverter("cliqueCheckout"); });
+    var prod = a.getAttribute("data-checkout");
+    a.addEventListener("click", function () { window.aprovaConverter("cliqueCheckout", prod); });
   });
   document.querySelectorAll("[data-liberacao]").forEach(function (el) {
     if (cfg.liberacao) el.textContent = cfg.liberacao;

@@ -144,7 +144,7 @@
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { erro.textContent = "Confira o e-mail: ele precisa estar no formato nome@dominio.com."; erro.hidden = false; return; }
       if (!document.getElementById("consent").checked) { erro.textContent = "Marque a caixa de consentimento para continuar."; erro.hidden = false; return; }
       salvarLead(nome, email, a, total);
-      window.aprovaConverter && window.aprovaConverter("lead");
+      window.aprovaConverter && window.aprovaConverter("lead", S.slug);
       resultado(nome);
     });
     topo();
