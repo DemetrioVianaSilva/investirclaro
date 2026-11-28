@@ -22,6 +22,9 @@
     }
   }[PROVA];
   var LETRAS = ["A", "B", "C", "D"];
+  /* Provas em que o servidor sorteia as questões e só devolve o gabarito depois da resposta */
+  var SERVIDOR = PROVA === "cpro-r";
+  function rpc(nome, corpo) { return renovar().then(function () { return api("/rest/v1/rpc/" + nome, { method: "POST", body: corpo }); }); }
   var CHAVE = "ic_area_sessao", HIST = "ic_area_hist_" + PROVA;
   var sessao = null, banco = null, timer = null;
 
@@ -116,8 +119,10 @@
       .then(function (u) { sessao.email = u.email; gravar(CHAVE, sessao); return api("/rest/v1/compradores?select=status&prova=eq." + PROVA); })
       .then(function (c) {
         /* Quem decide o acesso é o banco (RLS): sem compra ativa, a consulta volta vazia */
-        return api("/rest/v1/questoes?select=numero,tema,enunciado,alternativas,correta,comentario,grupo,dialogo&prova=eq." + PROVA + "&ativo=eq.true&order=numero&limit=2000")
-          .then(function (q) { banco = q || []; if (!banco.length) return semAcesso(c && c[0] ? c[0].status : null); marca(); menu(); });
+        var busca = SERVIDOR
+          ? rpc("contagem_questoes", { p_prova: PROVA }).then(function (l) { var b = []; (l || []).forEach(function (x) { for (var k = 0; k < Number(x.n); k++) b.push({ tema: x.tema }); }); return b; })
+          : api("/rest/v1/questoes?select=numero,tema,enunciado,alternativas,correta,comentario,grupo,dialogo&prova=eq." + PROVA + "&ativo=eq.true&order=numero&limit=2000");
+        return busca.then(function (q) { banco = q || []; if (!banco.length) return semAcesso(c && c[0] ? c[0].status : null); marca(); menu(); });
       })
       .catch(function (e) { if (e.status === 401 || e.message === "sem sessão") return sair(); login("Sua sessão expirou. Entre de novo."); });
   }
@@ -165,13 +170,36 @@
       '<p class="muted" style="font-size:.85rem;margin-top:24px">Acesso pessoal e intransferível de ' + esc(sessao.email || "") + '. O conteúdo é protegido pela Lei 9.610/1998: é proibido copiar, compartilhar ou revender as questões. <a href="../termos.html">Termos de uso</a>.</p>' +
       '</div>';
     document.getElementById("sair").onclick = sair;
-    document.getElementById("simulado").onclick = function () { iniciar(sortear(CONF.pesos, CONF.arvores), "Simulado · modo prova real", false, true); };
-    document.getElementById("simulado-livre").onclick = function () { iniciar(sortear(CONF.pesos, CONF.arvores), "Simulado · modo livre", false, false); };
+    document.getElementById("simulado").onclick = function () { comecar(CONF.pesos, CONF.arvores, "Simulado · modo prova real", false, true); };
+    document.getElementById("simulado-livre").onclick = function () { comecar(CONF.pesos, CONF.arvores, "Simulado · modo livre", false, false); };
     app.querySelectorAll("[data-tema]").forEach(function (b) {
-      b.onclick = function () { var k = b.getAttribute("data-tema"), p = {}; p[k] = 10; iniciar(sortear(p, 0), "Treino · " + CONF.temas[k], true); };
+      b.onclick = function () { var k = b.getAttribute("data-tema"), p = {}; p[k] = 10; comecar(p, 0, "Treino · " + CONF.temas[k], true); };
     });
     if (nArv) document.getElementById("treino-arvore").onclick = function () { iniciar(sortear({}, 2), "Treino · Árvores de diálogo", true); };
     topo();
+  }
+  function comecar(pesos, nArvores, tipo, treino, real) {
+    if (!SERVIDOR) return iniciar(sortear(pesos, nArvores), tipo, treino, real);
+    app.innerHTML = '<div class="gate"><p class="lead">Sorteando as questões…</p></div>';
+    rpc("sortear_questoes", { p_prova: PROVA, p_pesos: pesos })
+      .then(function (l) {
+        if (!l || !l.length) return carregar();
+        var qs = misturar(l.map(function (q) {
+          var ordem = misturar([0, 1, 2, 3]);
+          return { id: q.id, tema: q.tema, enunciado: q.enunciado, alternativas: ordem.map(function (i) { return q.alternativas[i]; }), ordem: ordem, correta: undefined, comentario: "", grupo: null };
+        }));
+        iniciar(qs, tipo, treino, real);
+      })
+      .catch(function (e) { if (e.status === 401) return sair(); menu(); alert("Não foi possível sortear as questões agora. Tente de novo em instantes."); });
+  }
+  /* Busca no servidor o gabarito e o comentário das questões já sorteadas */
+  function corrigir(lista) {
+    var falta = lista.filter(function (q) { return q.correta === undefined; });
+    if (!SERVIDOR || !falta.length) return Promise.resolve();
+    return rpc("corrigir_questoes", { p_prova: PROVA, p_ids: falta.map(function (q) { return q.id; }) }).then(function (l) {
+      var m = {}; (l || []).forEach(function (x) { m[x.id] = x; });
+      falta.forEach(function (q) { var x = m[q.id]; if (x) { q.correta = q.ordem.indexOf(Number(x.correta)); q.comentario = x.comentario || ""; } });
+    });
   }
   function prepara(q) {
     var ordem = misturar([0, 1, 2, 3]), alts = ordem.map(function (i) { return q.alternativas[i]; });
@@ -264,7 +292,13 @@
         '<button class="btn btn-sec" id="parar">Encerrar</button>' +
         '<button class="btn" id="avancar"' + (r === null && !real ? " disabled" : "") + '>' + (ultima ? "Ver resultado" : (real && r === null ? "Pular (fica em branco)" : "Próxima")) + '</button></div>';
       app.querySelectorAll(".alt").forEach(function (b) {
-        b.onclick = function () { resp[i] = Number(b.getAttribute("data-k")); mostrar(i, true); };
+        b.onclick = function () {
+          resp[i] = Number(b.getAttribute("data-k"));
+          if (treino && q.correta === undefined) {
+            app.querySelectorAll(".alt").forEach(function (x) { x.disabled = true; });
+            corrigir([q]).then(function () { mostrar(i, true); }, function () { mostrar(i, true); });
+          } else mostrar(i, true);
+        };
       });
       var bv = document.getElementById("voltar"); if (bv) bv.onclick = function () { mostrar(i - 1); };
       document.getElementById("avancar").onclick = function () { if (ultima) fim(); else mostrar(i + 1); };
@@ -273,6 +307,14 @@
     }
     function fim() {
       clearInterval(timer);
+      if (SERVIDOR && qs.some(function (q) { return q.correta === undefined; })) {
+        app.innerHTML = '<div class="gate"><p class="lead">Corrigindo seu simulado…</p></div>';
+        var tentar = function (n) { corrigir(qs).then(fimFinal, function () { if (n > 0) setTimeout(function () { tentar(n - 1); }, 1500); else fimFinal(); }); };
+        return tentar(2);
+      }
+      fimFinal();
+    }
+    function fimFinal() {
       var a = 0, t = {};
       qs.forEach(function (q, i) { t[q.tema] = t[q.tema] || { c: 0, n: 0 }; t[q.tema].n++; if (resp[i] === q.correta) { a++; t[q.tema].c++; } });
       var p = a / qs.length, etOk = 0, etTot = 0;
@@ -286,7 +328,7 @@
         var r = resp[i], ok = r === q.correta;
         return '<div class="rev ' + (ok ? "certa" : "errada") + '"><p class="tema-tag">' + (i + 1) + ' · ' + esc(CONF.temas[q.tema]) + '</p><p>' + esc(q.enunciado) + '</p>' +
           '<p class="resp"><strong>' + (ok ? "Você acertou: " : "Sua resposta: ") + '</strong>' + (r === null ? "em branco" : LETRAS[r] + ") " + esc(q.alternativas[r])) +
-          (ok ? "" : '<br><strong>Correta: </strong>' + LETRAS[q.correta] + ') ' + esc(q.alternativas[q.correta])) + '</p><p class="coment">' + esc(q.comentario) + '</p></div>';
+          (ok ? "" : (q.correta === undefined ? '<br><strong>Gabarito indisponível agora. Refaça o simulado mais tarde.</strong>' : '<br><strong>Correta: </strong>' + LETRAS[q.correta] + ') ' + esc(q.alternativas[q.correta]))) + '</p><p class="coment">' + esc(q.comentario) + '</p></div>';
       }).join("");
       app.innerHTML =
         '<div class="resultado"><p class="eyebrow">' + esc(tipo) + '</p>' +

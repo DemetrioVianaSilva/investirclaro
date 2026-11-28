@@ -443,7 +443,7 @@ details p { margin-top: 10px; color: var(--muted); }
 .area-aluno { -webkit-user-select: none; user-select: none; }
 
 /* ---------- Vitrine de produtos ---------- */
-.grade-produtos { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.grade-produtos { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
 .produto { gap: 14px; padding: clamp(22px, 4vw, 30px); }
 .produto h3 { font-size: 1.35rem; }
 .produto-destaque { border: 2px solid var(--accent); box-shadow: var(--shadow); }
