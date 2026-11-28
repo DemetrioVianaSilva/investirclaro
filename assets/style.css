@@ -271,8 +271,8 @@ details p { margin-top: 10px; color: var(--muted); }
 }
 .alt:hover { border-color: var(--muted); }
 .alt .bolha { flex: none; margin-top: 1px; width: 28px; height: 28px; font-size: 0.8rem; }
-.alt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
-.alt[aria-pressed="true"] .bolha { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.alt[aria-pressed="true"] { border-color: var(--ink); background: color-mix(in srgb, var(--ink) 8%, var(--surface)); }
+.alt[aria-pressed="true"] .bolha { background: var(--ink); border-color: var(--ink); color: var(--surface); }
 .sim-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
 .intro-card, .gate, .resultado { display: flex; flex-direction: column; gap: 18px; }
 .regras { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }

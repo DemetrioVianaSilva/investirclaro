@@ -11,7 +11,7 @@ window.APROVA_CONFIG = {
   },
 
   // Data em que o acesso pago é liberado (pré-venda). Deixe "" quando o produto já estiver pronto.
-  liberacao: "15 de janeiro de 2027",
+  liberacao: "",
 
   // Captura de leads no Supabase (tabela "leads"; SQL no README.md).
   // Use a chave "anon" pública. Deixe vazio para não salvar leads.

@@ -126,7 +126,7 @@
       '<div class="gate"><p class="eyebrow">Acesso não encontrado</p>' +
       '<h1>Não achamos uma compra ativa para ' + esc(sessao.email || "este e-mail") + '</h1>' +
       '<p class="lead">' + (status ? "O acesso deste e-mail está suspenso (reembolso ou cancelamento)." : "Confira se este é o mesmo e-mail usado na Hotmart. Se você acabou de comprar, aguarde alguns minutos e entre de novo.") + '</p>' +
-      '<div class="acoes"><a class="btn" href="../certificacoes/cpa/">Conhecer o preparatório</a><button class="btn btn-sec" id="sair">Entrar com outro e-mail</button></div>' +
+      '<div class="acoes"><a class="btn" href="../certificacoes/' + PROVA + '/">Conhecer o preparatório</a><button class="btn btn-sec" id="sair">Entrar com outro e-mail</button></div>' +
       '<p class="muted" style="font-size:.9rem">Precisa de ajuda? <span data-email></span></p></div>';
     if (window.icPreencherEmail) window.icPreencherEmail();
     document.getElementById("sair").onclick = sair;
@@ -242,7 +242,7 @@
       document.getElementById("parar").onclick = function () { fim(); };
       topo();
     }
-    function mostrar(i) {
+    function mostrar(i, fica) {
       if (qs[i].dlg && !dlgFeito[i]) return dialogo(i, (dlgResp[i] || []).length);
       var q = qs[i], r = resp[i], ver = treino && r !== null;
       var alts = q.alternativas.map(function (a, k) {
@@ -263,12 +263,12 @@
         '<button class="btn btn-sec" id="parar">Encerrar</button>' +
         '<button class="btn" id="avancar"' + (r === null && !real ? " disabled" : "") + '>' + (ultima ? "Ver resultado" : (real && r === null ? "Pular (fica em branco)" : "Próxima")) + '</button></div>';
       app.querySelectorAll(".alt").forEach(function (b) {
-        b.onclick = function () { resp[i] = Number(b.getAttribute("data-k")); mostrar(i); };
+        b.onclick = function () { resp[i] = Number(b.getAttribute("data-k")); mostrar(i, true); };
       });
       var bv = document.getElementById("voltar"); if (bv) bv.onclick = function () { mostrar(i - 1); };
       document.getElementById("avancar").onclick = function () { if (ultima) fim(); else mostrar(i + 1); };
       document.getElementById("parar").onclick = function () { fim(); };
-      topo();
+      if (!fica) topo();
     }
     function fim() {
       clearInterval(timer);
@@ -277,7 +277,7 @@
       var p = a / qs.length, etOk = 0, etTot = 0;
       qs.forEach(function (q, i) { if (q.dlg) q.dlg.etapas.forEach(function (et, j) { etTot++; if ((dlgResp[i] || [])[j] === et.correta) etOk++; }); });
       var hist = ler(HIST) || []; hist.unshift({ tipo: tipo, a: a, t: qs.length, p: p, d: Date.now() }); gravar(HIST, hist.slice(0, 30));
-      var temasHtml = Object.keys(t).map(function (k) {
+      var temasHtml = Object.keys(CONF.temas).filter(function (k) { return t[k]; }).map(function (k) {
         var x = t[k], pp = x.c / x.n;
         return '<div class="tema-res"><strong>' + esc(CONF.temas[k]) + '</strong><span>' + x.c + '/' + x.n + '</span><div class="barra"><i class="' + (pp < CONF.minimo ? "fraco" : "") + '" style="width:' + Math.round(pp * 100) + '%"></i></div></div>';
       }).join("");
